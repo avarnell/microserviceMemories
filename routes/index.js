@@ -36,12 +36,25 @@ router.get('/api/v1/memories', function(req,res,next){
   })
 })
 
+//select distinct memories.year as year from memories
+router.get('/api/v1/memories/years', function(req,res,next){
+  pg.connect(conString, function(err,client,done){
+    client.query('select distinct memories.year as year from memories', function(err,result){
+      var results = {
+        "links": {},
+        "data": []
+      }
+      results.data = result.rows
+      res.json(results)
+    })
+  })
+})
+
 router.get('/api/v1/memories/:year', function(req,res,next){
   var searchYear = req.params.year
   pg.connect(conString, function(err,client,done){
-    client.query('SELECT * FROM memories WHERE year = $1', [searchYear], function(err,result){
+    client.query('SELECT * FROM m emories WHERE year = $1', [searchYear], function(err,result){
       var results = { "links": {}, "data": [] }
-
       result.rows.forEach(function(row){
         var memory = {
           "type": "memory",
