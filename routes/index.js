@@ -53,8 +53,9 @@ router.get('/api/v1/memories/years', function(req,res,next){
 router.get('/api/v1/memories/:year', function(req,res,next){
   var searchYear = req.params.year
   pg.connect(conString, function(err,client,done){
-    client.query('SELECT * FROM m emories WHERE year = $1', [searchYear], function(err,result){
+    client.query('SELECT * FROM memories WHERE year = $1', [searchYear], function(err, result){
       var results = { "links": {}, "data": [] }
+      console.log(result)
       result.rows.forEach(function(row){
         var memory = {
           "type": "memory",
